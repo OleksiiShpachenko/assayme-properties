@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: admin
+  boot:
+    admin:
+      monitor:
+        connect-timeout: 50000
+        read-timeout: 50000
+
+server:
+  port: 5555
+  connection-timeout: 200000
+
+management:
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    registryFetchIntervalSeconds: 5
+    service-url:
+      defaultZone: http://67.205.152.2:8761/eureka
+  instance:
+    prefer-ip-address: true
+    health-check-url-path: /actuator/health
+    leaseRenewalIntervalInSeconds: 10
+    metadata-map:
+      startup: ${random.int}
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework: INFO
