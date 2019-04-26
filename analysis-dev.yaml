@@ -1,0 +1,73 @@
+spring:
+  application:
+    name: analysis
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:postgresql://67.205.152.2:5434/assay_data
+    username: postgres
+    password: docker
+    jpa:
+      hibernate:
+        ddl-auto: update
+      properties:
+        hibernate:
+          show_sql: true
+          temp:
+            use_jdbc_metadata_defaults: false
+          format_sql: true
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          generate_statistics: true
+
+
+server:
+  port: 5560
+
+assay-image-storage:
+  location: file_storage/image_storage
+
+zuul:
+  sensitiveHeaders: true
+  routes:
+    api:
+      path: /api/**
+    default:
+      path: /**
+      url: http://localhost:3000
+  set-content-length: true
+  host:
+    connect-timeout-millis: 600000
+    socket-timeout-millis: 600000
+
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+  eureka:
+    enabled: true
+
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    service-url:
+      defaultZone: http://67.205.152.2:8761/eureka/
+
+management:
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework: INFO
